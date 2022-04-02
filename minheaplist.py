@@ -13,6 +13,28 @@ class Item:
         self.next = n
 
 
+def minHeapify(n):
+    lowest = n
+
+    for c in [n.left, n.right]:
+        if c is not None and c.value < lowest.value:
+            lowest = c
+
+    if lowest is n:
+        return
+
+    lowest.value, n.value = n.value, lowest.value
+    minHeapify(n, lowest)
+
+def buildMinHeap(root):
+    if root is None:
+        return
+
+    buildMinHeap(root.left)
+    minHeapify(root)
+    buildMinHeap(root.right)
+
+
 class MinHeaplist:
     def __init__(self):
         self.min = None
@@ -29,7 +51,7 @@ class MinHeaplist:
         """
         Trivial case when the head pointer is null.
         """
-        if self.min == None:
+        if self.min is None:
             self.min = Item(new, None, None)
             return
 
@@ -51,14 +73,13 @@ class MinHeaplist:
         if new.value < head.value:
             self.min = new
 
-
     def linkheaps(self, h1, h2):
         pass
 
     def extractMin(self):
         pass
 
-    def union(self, H):
+    def union(self, h):
         pass
 
     def decreaseKey(self, node, k):
