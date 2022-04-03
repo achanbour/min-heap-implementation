@@ -24,14 +24,14 @@ class MinHeaplist:
 
     def insert(self, x):
 
-        new = Node(x, None, None, None)
+        new = Item(Node(x, None, None, None), None, None)
 
         """
         Trivial case when the head pointer is null.
         """
         if self.min is None:
-            self.min = Item(new, None, None)
-            return
+            self.min = new
+            return new
 
         head = self.min
         old = head.next
@@ -51,6 +51,8 @@ class MinHeaplist:
         if new.value < head.value:
             self.min = new
 
+        return new
+
     def minHeapify(self, n):
         lowest = n
 
@@ -68,6 +70,7 @@ class MinHeaplist:
     We are forced to traverse the whole binary tree from left to right and
     apply the minHeapify() on each traversed node.
     """
+
     def buildMinHeap(self, root):
         if root is None:
             return
@@ -102,8 +105,9 @@ class MinHeaplist:
         big = Item(self.min.heap, None, None)
 
         item = self.min
-        while item.next is not None:
+        while item.next is not self.min:
             self.linkheaps(big.heap, item.next.heap)
+            item = item.next
 
         self.min = big
 
@@ -141,14 +145,62 @@ class MinHeaplist:
         The cleanup operation is performed by calling combineMinHeaps() on the
         entire rootlist.
         """
-        self.min = left
+        self.min = litem
         self.combineMinHeaps()
 
         return head.heap.value
 
+    """
+    Create a new min-heap item consisting of a single node n with the new
+    value k and create -- if necessary -- one or two additional min-heap
+    items if n has any children.
+    """
 
     def decreaseKey(self, n, k):
-        pass
+
+        parent = n.parent
+
+        if n is parent.left:
+            parent.left = None
+        elif n is parent.right:
+            parent.right = None
+
+        """
+        Create two new min-heap items and connect their respective left and
+        right children -- if any -- to the new item min-heap node.
+        """
+
+        litem = self.insert(n.left.value)
+        litem.heap.left = n.left.left
+        litem.heap.right = n.left.right
+
+        ritem = self.insert(n.right.value)
+        ritem.heap.left = n.right.left
+        ritem.heap.right = n.right.right
+
+        """
+        Remove the children of node n.
+        """
+        n.left = None
+        n.right = None
+
+        """
+        Insert a new item with value k.
+        """
+        self.insert(k)
+
+    """
+    Iterate through the rootlist denoted by H and insert each item into the
+    current rootlist.
+    """
 
     def union(self, H):
-        pass
+        item = H.min
+        while item.next is not H.min:
+            new = self.insert(item.heap.value)
+            new.heap.left = item.heap.left
+            new.heap.right = item.heap.right
+            item = item.next
+
+
+
