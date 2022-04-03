@@ -1,5 +1,5 @@
 class Node:
-    def __init__(self, val, le, ri, pa):
+    def __init__(self, val, le=None, ri=None, pa=None):
         self.value = val
         self.left = le
         self.right = ri
@@ -7,7 +7,7 @@ class Node:
 
 
 class Item:
-    def __init__(self, aroot, p, n):
+    def __init__(self, aroot, p=None, n=None):
         self.heap = aroot
         self.previous = p
         self.next = n
@@ -24,7 +24,7 @@ class MinHeaplist:
 
     def insert(self, x):
 
-        new = Item(Node(x, None, None, None), None, None)
+        new = Item(Node(x))
 
         """
         Trivial case when the head pointer is null.
@@ -102,7 +102,7 @@ class MinHeaplist:
 
     def combineMinHeaps(self):
 
-        big = Item(self.min.heap, None, None)
+        big = Item(self.min.heap)
 
         item = self.min
         while item.next is not self.min:
