@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from tests.minheaplist import *
+import tests.minheaplist as test
 
 if __name__ == "__main__":
-     test_equalsTree()
+    test.equalsTree()

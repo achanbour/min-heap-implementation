@@ -53,6 +53,10 @@ class MinHeaplist:
 
         return new
 
+    """
+    This function rebalances the tree and corrects any violation of the min-heap property.
+    """
+
     def minHeapify(self, n):
         lowest = n
 
@@ -67,13 +71,17 @@ class MinHeaplist:
         self.minHeapify(n, lowest)
 
     """
-    We are forced to traverse the whole binary tree from left to right and
-    apply the minHeapify() on each traversed node.
+    We are forced to traverse the whole binary tree from left to right
+    and apply the minHeapify() on each traversed node.
     """
 
     def buildMinHeap(self, root):
         if root is None:
             return
+
+        """
+        Goes from leftmost node and applies minHeapify from left to right.
+        """
 
         self.buildMinHeap(root.left)
         self.minHeapify(root)
@@ -83,8 +91,8 @@ class MinHeaplist:
         node = h1
 
         """
-        We append the second heap at the leftmost leaf of the first heap and we
-        minheapify the resulting heap.
+        We append the second heap at the leftmost leaf of the first heap (without loss of generality)
+        and we minheapify the resulting heap.
         """
         while node.left is not None:
             node = node.left
@@ -93,11 +101,12 @@ class MinHeaplist:
         self.buildMinHeap(h1)
 
     """
-    Combine all the individual minheaps in the entire rootlist into a single
-    big minheap.
+    Combine all the individual minheaps in the collection into a single big min-heap.
 
     The former items of the rootlist are left dangling and will be deallocated
     from memory by the Python garbage collector.
+
+    This eventually amounts to them being removed from the min-heap list.
     """
 
     def combineMinHeaps(self):
@@ -191,7 +200,7 @@ class MinHeaplist:
 
     """
     Iterate through the rootlist denoted by H and insert each item into the
-    current rootlist.
+    current rootlist (pointed to by self).
     """
 
     def union(self, H):
