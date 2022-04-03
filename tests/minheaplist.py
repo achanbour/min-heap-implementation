@@ -4,37 +4,58 @@ from minheaplist import *
 from copy import *
 
 
-def equalsTree(a, b):
-    if a is None and b is None:
+def equalsTree(r1, r2):
+    if r1 is None and r2 is None:
         return True
 
-    if a is not None and b is not None:
+    if r1 is not None and r2 is not None:
         return (
-            (a.value == b.value)
-            and equalsTree(a.left, b.left)
-            and equalsTree(a.right, b.right)
+            (r1.value == r2.value)
+            and equalsTree(r1.left, r2.left)
+            and equalsTree(r1.right, r2.right)
         )
+
     return False
 
 
 def test_equalsTree():
 
-    a = Node(1)
-    a.left = Node(3)
-    a.left.left = Node(5)
-    a.left.left.left = Node(14)
-    a.left.right = Node(7)
-    a.right = Node(4)
-    a.right.left = Node(8)
-    a.right.left.right = Node(17)
-    a.right.right = Node(11)
+    r1 = Node(1)
+    r1.left = Node(3)
+    r1.left.left = Node(5)
+    r1.left.left.left = Node(14)
+    r1.left.right = Node(7)
+    r1.right = Node(4)
+    r1.right.left = Node(8)
+    r1.right.left.right = Node(17)
+    r1.right.right = Node(11)
 
-    b = deepcopy(a)
+    r2 = deepcopy(r1)
 
-    if equalsTree(a,b):
+    if equalsTree(r1, r2):
         print("equalsTree passed the test")
     else:
         print("equalsTree failed the test")
 
+
+
+
+
+def equalsMinHeaplist(h1, h2):
+
+    i1, i2 = h1.min, h2.min
+
+    while i1.next is not h1.min and i2.next is not h2.min:
+        if not equalsTree(i1.heap, i2.heap):
+            return False
+        i1 = i1.next
+        i2 = i2.next
+
+    if i1.next is not h1.min or i2.next is not h2.min:
+        return False
+
+    return True
+
+
 if __name__ == "__main__":
-     test_equalsTree()
+    test_equalsTree()
