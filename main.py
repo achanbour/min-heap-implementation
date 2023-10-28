@@ -6,10 +6,9 @@ from minheaplist import *
 import tests.minheaplist as test
 
 if __name__ == "__main__":
-
-    """
     plotter = GraphPlotter()
 
+    """
     n = Node(19)
     n.left = Node(3)
     n.left.left = Node(5)
@@ -23,7 +22,7 @@ if __name__ == "__main__":
     plotter.save_img(n, "before_heapify")
 
     heaplist = MinHeaplist()
-    heaplist.buildMinHeap(n)
+    heaplist.buildMinheap(n)
 
     plotter.save_img(n, "after_heapify")
     """
@@ -53,9 +52,9 @@ if __name__ == "__main__":
     print("The current min-heaplist:")
     H.print()
 
-    n = H.min.next.heap.left
+    n = H.min.next.heap
     print("Decreasing key", n.value, "to 2")
     H.decreaseKey(n, 2)
     H.print()
 
-
+    plotter.save_img(n, "decrease_key")

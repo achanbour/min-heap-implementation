@@ -7,17 +7,17 @@ class Node:
 
     # prints the whole tree below the current node
     def print(self):
-        self.printrec(0)
+        self.printrec()
 
     # recursively prints the values in the tree, indenting by depth
-    def printTree(self, depth):
+    def printrec(self, depth=0):
         print("    " * depth, end="")  # right amount of indentation
         print(self.value)
-        if self.left is not None:
+        if self.left is None:
             print("    " * (depth + 1), "None")
         else:
             self.left.printrec(depth + 1)
-        if self.right is not None:
+        if self.right is None:
             print("    " * (depth + 1), "None")
         else:
             self.right.printrec(depth + 1)
@@ -51,24 +51,56 @@ class MinHeaplist:
             return new
 
         head = self.min
-        old = head.next
 
         """
         We insert the new item between the head pointer and the next item.
         """
-        old.previous = new
+
+        if head.next is not None:
+            head.next.previous = new
+            new.next = head.next
+        else:
+            head.previous = new
+            new.next = head
+
         new.previous = head
         head.next = new
-        new.next = old
 
         """
         In case the new item has a lower value than the head pointer, then
         the new item becomes the head pointer.
         """
-        if new.value < head.value:
+        if new.heap.value < head.heap.value:
             self.min = new
 
         return new
+
+    def remove(self, x):
+        head = self.min
+
+        if head.heap.value == x:
+            head.next.previous = head.previous
+            head.previous.next = head.next
+            self.min = head.next
+            return True
+
+        head = self.find(x)
+
+        if head is not None:
+            head.next.previous = head.previous
+            head.previous.next = head.next
+            return True
+
+        return False
+
+    def find(self, x):
+        head = self.min
+        while head.next is not self.min:
+            if head.heap.value == x:
+                return head
+            head = head.next
+
+        return None
 
     """
     This function rebalances the tree and corrects any violation of the min-heap property.
@@ -92,7 +124,7 @@ class MinHeaplist:
     and apply the minHeapify() on each traversed node.
     """
 
-    def buildMinHeap(self, root):
+    def buildMinheap(self, root):
         if root is None:
             return
 
@@ -100,9 +132,9 @@ class MinHeaplist:
         Goes from leftmost node and applies minHeapify from left to right.
         """
 
-        self.buildMinHeap(root.left)
+        self.buildMinheap(root.left)
         self.minHeapify(root)
-        self.buildMinHeap(root.right)
+        self.buildMinheap(root.right)
 
     def linkheaps(self, h1, h2):
         node = h1
@@ -114,8 +146,9 @@ class MinHeaplist:
         while node.left is not None:
             node = node.left
         node.left = h2
+        h2.parent = node
 
-        self.buildMinHeap(h1)
+        self.buildMinheap(h1)
 
     """
     Combine all the individual minheaps in the collection into a single big min-heap.
@@ -138,22 +171,43 @@ class MinHeaplist:
         self.min = big
 
     def extractMin(self):
+
         head = self.min
+        value = head.heap.value
 
         l, r = head.heap.left, head.heap.right
 
         """
+        Trivial case: a singleton rootlist item.
+        """
+        if l is None or r is None:
+            """
+            Disconnect the min-item.
+            """
+            head.previous.next = head.next
+            head.next.previous = head.previous
+
+            """
+            Advance head pointer by one.
+            """
+            self.min = head.next
+
+            self.combineMinHeaps()
+            return value
+
+        """
         We ensure that the left item always has the lowest value.
         """
-        if l.value > r.value:
+        if l.value >= r.value:
             l, r = r, l
 
         """
         Insert the left and right sub-minheaps as items to the rootlist.
         """
         litem = Item(l, head.previous, None)
-        ritem = Item(r, None, head.next)
         head.previous.next = litem
+
+        ritem = Item(r, None, head.next)
         head.next.previous = ritem
 
         """
@@ -173,8 +227,7 @@ class MinHeaplist:
         """
         self.min = litem
         self.combineMinHeaps()
-
-        return head.heap.value
+        return value
 
     """
     Create a new min-heap item consisting of a single node n with the new
@@ -184,36 +237,32 @@ class MinHeaplist:
 
     def decreaseKey(self, n, k):
 
-        parent = n.parent
+        n.value = k
 
-        if n is parent.left:
-            parent.left = None
-        elif n is parent.right:
-            parent.right = None
+        root = n
+        while root.parent is not None:
+            root = root.parent
 
-        """
-        Create two new min-heap items and connect their respective left and
-        right children -- if any -- to the new item min-heap node.
-        """
+        self.buildMinheap(root)
 
-        litem = self.insert(n.left.value)
-        litem.heap.left = n.left.left
-        litem.heap.right = n.left.right
+        if k < self.min.heap.value:
+            head = self.find(k)
+            if head is not None:
+                self.min = head
 
-        ritem = self.insert(n.right.value)
-        ritem.heap.left = n.right.left
-        ritem.heap.right = n.right.right
+        if n.parent is None:
+            self.print()
+            self.remove(k)
+            self.print()
+            self.insert(k)
+            return
 
-        """
-        Remove the children of node n.
-        """
-        n.left = None
-        n.right = None
-
-        """
-        Insert a new item with value k.
-        """
-        self.insert(k)
+        if n.parent.left is n:
+            n.parent.left = n.left
+            n.left.parent = n.parent
+        elif n.parent.right is n:
+            n.parent.right = n.right
+            n.right.parent = n.parent
 
     """
     Iterate through the rootlist denoted by H and insert each item into the
@@ -226,16 +275,17 @@ class MinHeaplist:
             new = self.insert(item.heap.value)
             new.heap.left = item.heap.left
             new.heap.right = item.heap.right
+            item.heap.parent = new.heap
             item = item.next
 
     def print(self):
         h = self.min
         if h is not None:
             print("-----")
-            h.heap.print_tree()
+            h.heap.printrec()
             h = h.next
-            while h is not self.min:
+            while h is not None and h is not self.min:
                 print("-----")
-                h.heap.print_tree()
+                h.heap.printrec()
                 h = h.next
             print("-----")
