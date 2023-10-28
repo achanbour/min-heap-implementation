@@ -27,34 +27,44 @@ if __name__ == "__main__":
     plotter.save_img(n, "after_heapify")
     """
 
+    L = MinHeaplist()
+    L.insert(10)
+    L.insert(7)
+    L.insert(3)
+    L.insert(14)
+    L.insert(5)
+    print("Printing L before the decrease key")
+    L.print()
+
+    print("Decreasing:",L.min.next.next.heap.value," to :",2)
+    L.decreaseKey(L.min.next.next.heap,2)
+    print("After DecreaseKey")
+    L.print()
 
 
-    H = MinHeaplist()
+    K = MinHeaplist()
+    K.insert(12)
+    K.insert(4)
+    K.insert(8)
+    K.insert(18)
+    print("Printing K")
+    K.print()
 
-    print("Inserting 5")
-    H.insert(5)
-    print("Inserting 3")
-    H.insert(3)
-    print("Inserting 7")
-    H.insert(7)
-    print("Inserting 6")
-    H.insert(6)
-    H.print()
+    L.union(K)
+    print("Printing the union")
+    L.print()
+    print("Extracting min value:",L.extractMin())
+    L.print()
+    print("Extracting min value:",L.extractMin())
+    L.print()
+    print("Extracting min value:",L.extractMin())
+    L.print()
+    extract = L.min.heap.left.left
+    print("We're decreasing:",extract.value,"to 3")
+    L.decreaseKey(extract,3)
+    L.print()
+    print("Extracting min value:",L.extractMin())
+    print("Extracting min value:",L.extractMin())
+    print("Extracting min value:",L.extractMin())
+    L.print()
 
-    print("Extracting ", H.extractMin())
-
-    print("The current min-heaplist:")
-    H.print()
-
-    print("Inserting 4")
-    H.insert(4)
-
-    print("The current min-heaplist:")
-    H.print()
-
-    n = H.min.next.heap
-    print("Decreasing key", n.value, "to 2")
-    H.decreaseKey(n, 2)
-    H.print()
-
-    plotter.save_img(n, "decrease_key")

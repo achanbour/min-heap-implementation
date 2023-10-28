@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 class Node:
     def __init__(self, val, le=None, ri=None, pa=None):
         self.value = val
@@ -5,11 +6,15 @@ class Node:
         self.right = ri
         self.parent = pa
 
-    # prints the whole tree below the current node
+    """
+    Prints the whole tree below the current node.
+    """
     def print(self):
         self.printrec()
 
-    # recursively prints the values in the tree, indenting by depth
+    """
+    Recursively prints the values in the tree, indenting by depth.
+    """
     def printrec(self, depth=0):
         print("    " * depth, end="")  # right amount of indentation
         print(self.value)
@@ -75,6 +80,9 @@ class MinHeaplist:
 
         return new
 
+    """
+    Removing an item with value x from the rootlist.
+    """
     def remove(self, x):
         head = self.min
 
@@ -82,25 +90,22 @@ class MinHeaplist:
             head.next.previous = head.previous
             head.previous.next = head.next
             self.min = head.next
-            return True
 
         head = self.find(x)
 
         if head is not None:
             head.next.previous = head.previous
             head.previous.next = head.next
-            return True
 
-        return False
-
+    """
+    Find an item with value x in the rootlist.
+    """
     def find(self, x):
         head = self.min
         while head.next is not self.min:
             if head.heap.value == x:
                 return head
             head = head.next
-
-        return None
 
     """
     This function rebalances the tree and corrects any violation of the min-heap property.
@@ -237,32 +242,41 @@ class MinHeaplist:
 
     def decreaseKey(self, n, k):
 
-        n.value = k
+        """
+        Inserting the update node to the rootlist.
+        """
+        self.insert(k)
 
-        root = n
-        while root.parent is not None:
-            root = root.parent
+        """
+        Attaching any min-heap rooted at a child of n into the rootlist.
+        """
 
-        self.buildMinheap(root)
+        node = self.find(k)
+
+        if n.right is not None:
+            node.heap.right = n.right
+        elif n.left is not None:
+            node.heap.left = n.left
+
+        """
+        Updating the head pointer of the rootlist.
+        """
 
         if k < self.min.heap.value:
             head = self.find(k)
             if head is not None:
                 self.min = head
 
-        if n.parent is None:
-            self.print()
-            self.remove(k)
-            self.print()
-            self.insert(k)
-            return
+        """"
+        Removing node from rootlist.
+        """
+        if n.parent is not None and n.parent.left is not None and n.parent.left is n:
+            n.parent.left = None
+        elif n.parent is not None and n.parent.right is not None and n.parent.left is n:
+            n.parent.right = None
 
-        if n.parent.left is n:
-            n.parent.left = n.left
-            n.left.parent = n.parent
-        elif n.parent.right is n:
-            n.parent.right = n.right
-            n.right.parent = n.parent
+        if n.parent is None:
+            self.remove(n.value)
 
     """
     Iterate through the rootlist denoted by H and insert each item into the
@@ -289,3 +303,40 @@ class MinHeaplist:
                 h.heap.printrec()
                 h = h.next
             print("-----")
+
+"""
+Testing.
+"""
+
+if __name__ == '__main__':
+
+    H = MinHeaplist()
+
+    print("Inserting 5")
+    H.insert(5)
+    print("Inserting 3")
+    H.insert(3)
+    print("Inserting 7")
+    H.insert(7)
+    print("Inserting 6")
+    H.insert(6)
+    H.print()
+
+    print("Extracting ",H.extractMin())
+
+    print("The current min-heaplist:")
+    H.print()
+
+    print("Inserting 4")
+    H.insert(4)
+
+    print("The current min-heaplist:")
+    H.print()
+
+    n=H.min.next.heap.left
+    print("Decreasing key",n.value,"to 2")
+    H.decreaseKey(n,2)
+    H.print()
+
+
+

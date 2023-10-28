@@ -88,6 +88,7 @@ if __name__ == '__main__':
     H.my_print()
 
     n=H.min.next.heap.left
+    print(n.value)
     print("Decreasing key",n.value,"to 2")
     H.decreaseKey(n,2)
     H.my_print()
