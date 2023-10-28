@@ -9,11 +9,15 @@ if __name__ == "__main__":
 
     plotter = GraphPlotter()
 
-    n = Node(5)
+    n = Node(19)
     n.left = Node(3)
-    n.left.left = Node(2)
-    n.left.right = Node(1)
-    n.right = Node(4)
+    n.left.left = Node(5)
+    n.left.left.left = Node(14)
+    n.left.right = Node(7)
+    n.right = Node(15)
+    n.right.left = Node(8)
+    n.right.left.right = Node(17)
+    n.right.right = Node(11)
 
     plotter.save_img(n, "before_heapify")
 
