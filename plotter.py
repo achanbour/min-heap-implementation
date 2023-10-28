@@ -10,13 +10,13 @@ class GraphPlotter:
         if node is None or self.graph is None:
             return
 
-        self.graph.add_node(pydot.Node(id(node.value), label=node.value))
+        self.graph.add_node(pydot.Node(id(node), label=node.value))
 
         self.traverse_inorder(node.left)
         if node.left is not None:
-            self.graph.add_edge(pydot.Edge(id(node.value), id(node.left.value)))
+            self.graph.add_edge(pydot.Edge(id(node), id(node.left)))
         if node.right is not None:
-            self.graph.add_edge(pydot.Edge(id(node.value), id(node.right.value)))
+            self.graph.add_edge(pydot.Edge(id(node), id(node.right)))
         self.traverse_inorder(node.right)
 
     def save_img(self, root, name):
