@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 class Node:
     def __init__(self, val, le=None, ri=None, pa=None):
         self.value = val
@@ -146,7 +145,7 @@ class MinHeaplist:
 
         """
         We append the second heap at the leftmost leaf of the first heap (without loss of generality)
-        and we minheapify the resulting heap.
+        and we minHeapify the resulting heap.
         """
         while node.left is not None:
             node = node.left
@@ -156,7 +155,7 @@ class MinHeaplist:
         self.buildMinheap(h1)
 
     """
-    Combine all the individual minheaps in the collection into a single big min-heap.
+    Combine all the individual min-heaps in the collection into a single big min-heap.
 
     The former items of the rootlist are left dangling and will be deallocated
     from memory by the Python garbage collector.
@@ -182,9 +181,6 @@ class MinHeaplist:
 
         l, r = head.heap.left, head.heap.right
 
-        """
-        Trivial case: a singleton rootlist item.
-        """
         if l is None or r is None:
             if head.next is not None and head.previous is not None:
                 """
@@ -235,6 +231,8 @@ class MinHeaplist:
         self.combineMinHeaps()
         return value
 
+
+
     """
     Create a new min-heap item consisting of a single node n with the new
     value k and create -- if necessary -- one or two additional min-heap
@@ -244,7 +242,7 @@ class MinHeaplist:
     def decreaseKey(self, n, k):
 
         """
-        Inserting the update node to the rootlist.
+        Inserting the updated node to the rootlist.
         """
         self.insert(k)
 
