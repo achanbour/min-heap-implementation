@@ -186,16 +186,17 @@ class MinHeaplist:
         Trivial case: a singleton rootlist item.
         """
         if l is None or r is None:
-            """
-            Disconnect the min-item.
-            """
-            head.previous.next = head.next
-            head.next.previous = head.previous
+            if head.next is not None and head.previous is not None:
+                """
+                Disconnect the min-item.
+                """
+                head.previous.next = head.next
+                head.next.previous = head.previous
 
-            """
-            Advance head pointer by one.
-            """
-            self.min = head.next
+                """
+                Advance head pointer by one.
+                """
+                self.min = head.next
 
             self.combineMinHeaps()
             return value
