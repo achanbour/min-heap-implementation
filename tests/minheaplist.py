@@ -3,6 +3,7 @@
 from minheaplist import *
 
 import copy
+import pydot
 import tests.helpers as helper
 
 
@@ -30,5 +31,7 @@ def equalsMinHeaplist():
     pass
 
 
-if __name__ == "__main__":
-    equalsTree()
+def minHeapify():
+    pass
+
+

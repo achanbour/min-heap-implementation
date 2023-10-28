@@ -68,7 +68,7 @@ class MinHeaplist:
             return
 
         lowest.value, n.value = n.value, lowest.value
-        self.minHeapify(n, lowest)
+        self.minHeapify(lowest)
 
     """
     We are forced to traverse the whole binary tree from left to right
@@ -210,6 +210,3 @@ class MinHeaplist:
             new.heap.left = item.heap.left
             new.heap.right = item.heap.right
             item = item.next
-
-
-
