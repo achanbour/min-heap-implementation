@@ -5,6 +5,23 @@ class Node:
         self.right = ri
         self.parent = pa
 
+    # prints the whole tree below the current node
+    def print(self):
+        self.printrec(0)
+
+    # recursively prints the values in the tree, indenting by depth
+    def printTree(self, depth):
+        print("    " * depth, end="")  # right amount of indentation
+        print(self.value)
+        if self.left is not None:
+            print("    " * (depth + 1), "None")
+        else:
+            self.left.printrec(depth + 1)
+        if self.right is not None:
+            print("    " * (depth + 1), "None")
+        else:
+            self.right.printrec(depth + 1)
+
 
 class Item:
     def __init__(self, aroot, p=None, n=None):
@@ -210,3 +227,15 @@ class MinHeaplist:
             new.heap.left = item.heap.left
             new.heap.right = item.heap.right
             item = item.next
+
+    def print(self):
+        h = self.min
+        if h is not None:
+            print("-----")
+            h.heap.print_tree()
+            h = h.next
+            while h is not self.min:
+                print("-----")
+                h.heap.print_tree()
+                h = h.next
+            print("-----")
